@@ -3,46 +3,44 @@
 #include "perl.h"
 #include "XSUB.h"
 
-#include "ppport.h"
-
+#include <stdio.h>
 #include <unistd.h>
 
 MODULE = Unix::Pledge		PACKAGE = Unix::Pledge		
-PROTOTYPES: ENABLE
 
-SV *
-_pledge(promises, paths)
+void
+pledge(promises, ...)
     const char *promises
-    SV *paths
+PROTOTYPE: $;$
 INIT:
-    AV *results;
-    SSize_t numpaths = 0, n;
-    int ret;
-    SvGETMAGIC(paths);
-    if ((!SvROK(paths))
-        || (SvTYPE(SvRV(paths)) != SVt_PVAV))
-    {
-        XSRETURN_UNDEF;
+    // Check that if 2nd param provided it is an array ref
+    if (items > 1) {
+        SvGETMAGIC(ST(1));
+        if ((!SvROK(ST(1))) || (SvTYPE(SvRV(ST(1))) != SVt_PVAV))
+        {
+            croak("unable to pledge: %s", "whitelist parameter must be an array ref");
+        }
     }
-    results = (AV *) sv_2mortal ((SV *) newAV ());
 CODE:
-    numpaths = av_top_index((AV *)SvRV(paths));
-    if (numpaths > 0) {
+    SSize_t numpaths = 0, n;
+
+    // whitelist provided
+    if (items > 1 && (numpaths = av_top_index((AV *)SvRV(ST(1))) >= 0)) {
+
+        // array has at least one whitepath
         const char *wpaths[numpaths+1];
         for (n = 0; n < numpaths; n++) {
             STRLEN l;
-            wpaths[n] = SvPV(*av_fetch((AV *)SvRV(paths), n, 0), l);
+            wpaths[n] = SvPV(*av_fetch((AV *)SvRV(ST(1)), n, 0), l);
         }
         wpaths[numpaths] = NULL;
-        ret = pledge(promises, wpaths);
+        if (pledge(promises, wpaths) == -1) {
+            croak("unable to pledge: %s", strerror(errno));
+        }
     }
+    // no whitelist provided
     else {
-        ret = pledge(promises, NULL);
+        if (pledge(promises, NULL) == -1) {
+            croak("unable to pledge: %s", strerror(errno));
+        }
     }
-    av_push(results, newSVnv(ret));
-    if (ret == -1) {
-        av_push(results, newSVnv(errno));
-    }
-    RETVAL = newRV((SV *)results);
-OUTPUT:
-    RETVAL
