@@ -3,7 +3,6 @@
 #include "perl.h"
 #include "XSUB.h"
 
-#include <stdio.h>
 #include <unistd.h>
 
 MODULE = Unix::Pledge		PACKAGE = Unix::Pledge		
@@ -27,13 +26,14 @@ CODE:
     // whitelist provided
     if (items > 1 && (numpaths = av_top_index((AV *)SvRV(ST(1))) >= 0)) {
 
-        // array has at least one whitepath
         const char *wpaths[numpaths+1];
+
         for (n = 0; n < numpaths; n++) {
             STRLEN l;
             wpaths[n] = SvPV(*av_fetch((AV *)SvRV(ST(1)), n, 0), l);
         }
         wpaths[numpaths] = NULL;
+
         if (pledge(promises, wpaths) == -1) {
             croak("unable to pledge: %s", strerror(errno));
         }
