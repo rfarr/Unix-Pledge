@@ -24,24 +24,25 @@ Unix::Pledge - restrict system operations
   use Unix::Pledge;
 
   # ...
-  # Program initializtion, open files, fork, etc
+  # Program initializtion, open files, drop privileges, fork, etc
   # ...
 
-  # Now that we're initialized, limit our process to only perform operations on
-  # /tmp as well as standard io
-  pledge("stdio tmppath");
+  # Now that we're initialized, limit our process to reading our .profile 
+  pledge("stdio rpath", ["/home/$ENV{USER}/.profile"]);
 
-  # ...
-  # Code restricted to tmp and stdio operations only
-  # ...
-
-  print "This is OK."
+  # Reading user's .profile works as expected
+  open(my $fd, "<", "/home/$ENV{USER}/.profile");
+  while(<$fd>) {
+    print $_;
+  }
  
-  # Further restrict our process to tmp only
-  pledge("tmppath");
+  # Trying to open outside whitelisted path fails with file not found
+  open($fd, "<", "/etc/passwd") or warn $!;
 
-  print "This will fail and cause a SIGABRT, terminating the program";
+  # Trying to write will cause SIGABRT
+  open($fd, ">", "/home/$ENV{USER}/.profile");
 
+  # Abort trap (core dumped)
 
 =head1 DESCRIPTION
  
@@ -52,7 +53,7 @@ networking.  In general, these modes were selected by studying the
 operation of many programs using libc and other such interfaces, and
 setting promises or paths.
 
-Requires that the kernel supports the pledge(2) syscall, which as of this
+Requires that the kernel supports the C<pledge(2)> syscall, which as of this
 writing is only available in OpenBSD.
 
 The pledge function takes two parameters: "promises" and "whitepaths".
@@ -76,11 +77,9 @@ on your process, not relax them.
 
 Unix::Pledge will croak on any errors.
 
-
-
 =head2 EXPORT
 
-The "pledge" function is exported by default.
+The C<pledge> function is exported by default.
 
 =head1 SEE ALSO
 
