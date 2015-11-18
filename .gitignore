@@ -1,2 +1,12 @@
 *.swp
 Makefile.old
+README
+Makefile
+MYMETA.*
+Unix-Pledge-*.tar.gz
+blib/
+pm_to_blib
+Pledge.bs
+Pledge.c
+Pledge.o
+MANIFEST.bak
