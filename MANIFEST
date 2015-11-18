@@ -1,7 +1,8 @@
 Changes
+lib/Unix/Pledge.pm
 Makefile.PL
 MANIFEST
+MANIFEST.SKIP
 Pledge.xs
 README
 t/Unix-Pledge.t
-lib/Unix/Pledge.pm

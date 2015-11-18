@@ -85,9 +85,10 @@ The "pledge" function is exported by default.
 =head1 SEE ALSO
 
 For detailed information on pledge, its parameters and errors, please see the
-man page for pledge(2).
+L<OpenBSD pledge(2) man page|http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man2/pledge.2?query=pledge>.
 
-Github repo: https://github/com/rfarr/Unix-Pledge
+L<Github repo|https://github.com/rfarr/Unix-Pledge>
+
 
 =head1 AUTHOR
 
