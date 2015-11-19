@@ -2,6 +2,8 @@ use strict;
 
 use ExtUtils::MakeMaker;
 
+die "ERROR: pledge(2) is only supported in OpenBSD 5.9\n" unless $^O eq "openbsd";
+
 WriteMakefile(
     NAME              => 'Unix::Pledge',
     VERSION_FROM      => 'lib/Unix/Pledge.pm',
