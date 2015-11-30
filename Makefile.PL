@@ -2,7 +2,19 @@ use strict;
 
 use ExtUtils::MakeMaker;
 
-die "ERROR: pledge(2) is only supported in OpenBSD 5.9\n" unless $^O eq "openbsd";
+my $PLEDGE_CHECK = <<EOC
+
+#include <unistd.h>
+
+void main() {
+    pledge("", NULL);
+}
+
+EOC
+;
+
+system("echo '$PLEDGE_CHECK' | cc -x c - > /dev/null 2>&1");
+die "ERROR: unable to find pledge, platform not supported" if $?;
 
 WriteMakefile(
     NAME              => 'Unix::Pledge',
