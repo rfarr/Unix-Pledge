@@ -6,3 +6,7 @@ Revision history for Perl extension Unix::Pledge.
 0.002  2015-11-17
     - removed extraneous perl glue code
     - tidy and document
+
+0.003  2015-11-30
+    - added better capability check for pledge on install
+    - basic test cases to verify that pledge is indeed working

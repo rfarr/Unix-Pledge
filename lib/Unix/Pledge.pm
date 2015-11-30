@@ -7,7 +7,7 @@ require Exporter;
 our @ISA = qw{Exporter};
 our @EXPORT = qw{pledge};
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 require XSLoader;
 XSLoader::load('Unix::Pledge', $VERSION);
