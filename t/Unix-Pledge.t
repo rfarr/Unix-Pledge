@@ -78,19 +78,22 @@ my $TESTS = {
             );
         }
     },
-    "Whitelist file" => {
-        aborts => 0,
-        run => sub {
-            use File::Temp;
-            my ($fh, $filename) = File::Temp::tempfile();
-
-            pledge("stdio rpath", ["$filename-to-some-other-file"]);
-
-            # File not found though it's there
-            open(my $fh2, "<", $filename) or return;
-            exit 1;
-        },
-    }
+# Disabled this test since pledge(2) will not initially support
+# whitelists in OpenBSD 5.9
+#
+#    "Whitelist file" => {
+#        aborts => 0,
+#        run => sub {
+#            use File::Temp;
+#            my ($fh, $filename) = File::Temp::tempfile();
+#
+#            pledge("stdio rpath", ["$filename-to-some-other-file"]);
+#
+#            # File not found though it's there
+#            open(my $fh2, "<", $filename) or return;
+#            exit 1;
+#        },
+#    },
 };
 
 

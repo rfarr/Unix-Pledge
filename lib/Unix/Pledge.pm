@@ -7,7 +7,7 @@ require Exporter;
 our @ISA = qw{Exporter};
 our @EXPORT = qw{pledge};
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 require XSLoader;
 XSLoader::load('Unix::Pledge', $VERSION);
@@ -56,6 +56,8 @@ setting promises or paths.
 Requires that the kernel supports the C<pledge(2)> syscall, which as of this
 writing is only available in OpenBSD.
 
+B<NOTE:> As of OpenBSD 5.9 the "whitepaths" parameter is B<disabled> as its implementation is incomplete. Hopefully this will be rectified by the 6.0 release.
+
 The pledge function takes two parameters: "promises" and "whitepaths".
 
 "Promises" is a space delimited string of modes which the process is promising
@@ -95,8 +97,8 @@ Richard Farr C<< <richard@nxbit.io> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2015 by Richard Farr
+Copyright (C) 2016 by Richard Farr
 
-This module is licensed under the same terms as perl itself.
+This module is licensed under the same terms as Perl itself.
 
 =cut
