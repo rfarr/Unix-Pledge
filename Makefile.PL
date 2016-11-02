@@ -6,8 +6,9 @@ my $PLEDGE_CHECK = <<EOC
 
 #include <unistd.h>
 
-void main() {
+int main() {
     pledge("", NULL);
+    return 0;
 }
 
 EOC

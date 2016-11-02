@@ -7,7 +7,7 @@ require Exporter;
 our @ISA = qw{Exporter};
 our @EXPORT = qw{pledge};
 
-our $VERSION = '0.004';
+our $VERSION = '0.005';
 
 require XSLoader;
 XSLoader::load('Unix::Pledge', $VERSION);
@@ -56,7 +56,7 @@ setting promises or paths.
 Requires that the kernel supports the C<pledge(2)> syscall, which as of this
 writing is only available in OpenBSD.
 
-B<NOTE:> As of OpenBSD 5.9 the "whitepaths" parameter is B<disabled> as its implementation is incomplete. Hopefully this will be rectified by the 6.0 release.
+B<NOTE:> As of OpenBSD 6.0 the "whitepaths" parameter is B<disabled> as its implementation is incomplete.
 
 The pledge function takes two parameters: "promises" and "whitepaths".
 

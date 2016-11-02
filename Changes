@@ -15,3 +15,7 @@ Revision history for Perl extension Unix::Pledge.
     - added documentation note that whitelist feature is disabled
       in OpenBSD 5.9
     - comment out whitelist test since it is not functional at this time
+
+0.005  2016-11-02
+    - fix broken tests
+    - tweak docs
